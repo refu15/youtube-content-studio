@@ -10,6 +10,7 @@ import Trends from './pages/Trends'
 import ViralFinder from './pages/ViralFinder'
 import Analytics from './pages/Analytics'
 import CombinedPlanning from './pages/CombinedPlanning'
+import ChannelManagement from './pages/ChannelManagement'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="viral" element={<ViralFinder />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="combined" element={<CombinedPlanning />} />
+          <Route path="channels" element={<ChannelManagement />} />
         </Route>
       </Routes>
     </AuthProvider>

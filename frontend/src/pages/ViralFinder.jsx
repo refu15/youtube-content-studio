@@ -1,9 +1,12 @@
 import { useState } from 'react'
-import { Zap, Loader2, ExternalLink, Eye, ThumbsUp, MessageCircle, Users, TrendingUp, Download } from 'lucide-react'
+import { Zap, Loader2, ExternalLink, Eye, ThumbsUp, MessageCircle, Users, TrendingUp, Download, Save } from 'lucide-react'
+import { useAuth } from '../contexts/AuthContext'
+import { analysisApi, channelApi } from '../services/api'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 export default function ViralFinder() {
+  const { user } = useAuth()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [result, setResult] = useState(null)
@@ -12,12 +15,28 @@ export default function ViralFinder() {
   const [maxSubscribers, setMaxSubscribers] = useState(100000)
   const [downloadingReport, setDownloadingReport] = useState(false)
   const [lastRequest, setLastRequest] = useState(null)
+  const [savingAnalysis, setSavingAnalysis] = useState(false)
+  const [saveMessage, setSaveMessage] = useState('')
+  const [saveError, setSaveError] = useState('')
+  const [channels, setChannels] = useState([]);
+  const [selectedChannel, setSelectedChannel] = useState('');
+
+  useEffect(() => {
+    if (user?.id) {
+      channelApi.getChannels(user.id)
+        .then(setChannels)
+        .catch(err => console.error("Failed to fetch channels:", err));
+    }
+  }, [user?.id]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
     setLoading(true)
     setResult(null)
+    setSaveMessage('')
+    setSaveError('')
 
     try {
       const keywordList = keywords.split(',').map(k => k.trim()).filter(k => k)
@@ -57,6 +76,7 @@ export default function ViralFinder() {
         max_subscribers: parseInt(maxSubscribers),
         platforms: ['YouTube'],
         max_results: 20,
+        channel_id: selectedChannel || null,
       })
     } catch (err) {
       setError(err.message || 'バイラル動画検索に失敗しました')
@@ -98,6 +118,56 @@ export default function ViralFinder() {
       setError(err.message || 'レポートダウンロードに失敗しました')
     } finally {
       setDownloadingReport(false)
+    }
+  }
+
+  const handleSaveAnalysis = async () => {
+    if (!result || !lastRequest) return
+    if (!user?.id) {
+      setSaveError('保存するにはログインが必要です')
+      return
+    }
+
+    setSaveError('')
+    setSaveMessage('')
+    setSavingAnalysis(true)
+
+    try {
+      const requestKeywords = lastRequest.keywords || lastRequest.persona_keywords || []
+      const keywordSummary = Array.isArray(requestKeywords)
+        ? requestKeywords.slice(0, 3).join(' / ')
+        : ''
+      const summaryParts = []
+      if (keywordSummary) summaryParts.push(keywordSummary)
+
+      if (Array.isArray(result?.videos) && result.videos.length > 0) {
+        const highestRatio = result.videos.reduce((max, video) => {
+          if (typeof video?.viral_ratio !== 'number') {
+            return max
+          }
+          return Math.max(max, video.viral_ratio)
+        }, 0)
+
+        if (highestRatio > 0) {
+          summaryParts.push(`最高比率 ${highestRatio.toFixed(1)}x`)
+        }
+      }
+
+      await analysisApi.saveRun(user.id, {
+        analysis_type: 'viral',
+        keywords: Array.isArray(requestKeywords) ? requestKeywords : [],
+        platforms: lastRequest.platforms || ['YouTube'],
+        summary: summaryParts.length > 0 ? summaryParts.join(' | ') : 'バイラル分析',
+        channel_id: lastRequest.channel_id || null,
+        meta: lastRequest,
+        result,
+      })
+
+      setSaveMessage('分析結果を保存しました。')
+    } catch (err) {
+      setSaveError(err.message || '分析結果の保存に失敗しました')
+    } finally {
+      setSavingAnalysis(false)
     }
   }
 
@@ -180,6 +250,25 @@ export default function ViralFinder() {
                 </p>
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  チャンネル（任意）
+                </label>
+                <select
+                  value={selectedChannel}
+                  onChange={(e) => setSelectedChannel(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                >
+                  <option value="">チャンネルを選択...</option>
+                  {channels.map(channel => (
+                    <option key={channel.id} value={channel.id}>{channel.channel_name}</option>
+                  ))}
+                </select>
+                <p className="mt-1 text-xs text-gray-500">
+                  分析を特定のチャンネルに紐付ける場合に選択します。
+                </p>
+              </div>
+
               {error && (
                 <div className="rounded-md bg-red-50 p-4">
                   <p className="text-sm text-red-800">{error}</p>
@@ -212,7 +301,24 @@ export default function ViralFinder() {
           {result && (
             <>
               {/* Download Report Button */}
-              <div className="flex justify-end mb-4">
+              <div className="flex flex-wrap justify-end gap-3 mb-4">
+                <button
+                  onClick={handleSaveAnalysis}
+                  disabled={savingAnalysis}
+                  className="flex items-center px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:bg-gray-400"
+                >
+                  {savingAnalysis ? (
+                    <>
+                      <Loader2 className="animate-spin h-4 w-4 mr-2" />
+                      保存中...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-4 w-4 mr-2" />
+                      この分析を保存
+                    </>
+                  )}
+                </button>
                 <button
                   onClick={handleDownloadReport}
                   disabled={downloadingReport}
@@ -249,6 +355,18 @@ export default function ViralFinder() {
                   ))}
                 </ul>
               </div>
+
+              {(saveMessage || saveError) && (
+                <div
+                  className={`rounded-md px-4 py-2 text-sm ${
+                    saveError
+                      ? 'bg-red-50 text-red-700 border border-red-200'
+                      : 'bg-amber-50 text-amber-700 border border-amber-200'
+                  }`}
+                >
+                  {saveError || saveMessage}
+                </div>
+              )}
 
               {/* Viral Patterns */}
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">

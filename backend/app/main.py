@@ -43,7 +43,7 @@ async def health_check():
 
 
 # Import and include routers
-from .api import planning, trends, viral, analytics, reports
+from .api import planning, trends, viral, analytics, reports, dashboard, analysis, channels, stats
 
 app.include_router(
     planning.router,
@@ -73,4 +73,28 @@ app.include_router(
     reports.router,
     prefix=f"{settings.API_V1_STR}/reports",
     tags=["reports"]
+)
+
+app.include_router(
+    dashboard.router,
+    prefix=f"{settings.API_V1_STR}/dashboard",
+    tags=["dashboard"]
+)
+
+app.include_router(
+    analysis.router,
+    prefix=f"{settings.API_V1_STR}/analysis",
+    tags=["analysis"]
+)
+
+app.include_router(
+    channels.router,
+    prefix=f"{settings.API_V1_STR}/channels",
+    tags=["channels"]
+)
+
+app.include_router(
+    stats.router,
+    prefix=f"{settings.API_V1_STR}/stats",
+    tags=["stats"]
 )

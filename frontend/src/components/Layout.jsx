@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
-import { Video, Home, Lightbulb, TrendingUp, BarChart3, LogOut, User, Zap, Sparkles } from 'lucide-react'
+import { Video, Home, Lightbulb, TrendingUp, BarChart3, LogOut, User, Zap, Sparkles, Youtube } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function Layout() {
@@ -23,6 +23,7 @@ export default function Layout() {
     { name: 'バイラル動画発見', href: '/viral', icon: Zap },
     { name: 'CSV分析', href: '/analytics', icon: BarChart3 },
     { name: '統合企画案', href: '/combined', icon: Sparkles },
+    { name: 'チャンネル管理', href: '/channels', icon: Youtube },
   ]
 
   return (

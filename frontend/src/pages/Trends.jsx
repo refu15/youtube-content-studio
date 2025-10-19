@@ -3,6 +3,9 @@ import { TrendingUp, Loader2, Youtube, Hash, Instagram, ExternalLink, Eye, Thumb
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
+// DEBUG: Log API URL
+console.log('[DEBUG] API_URL:', API_URL)
+
 export default function Trends() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')

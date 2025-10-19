@@ -17,6 +17,11 @@ allowed_origins = settings.get_allowed_origins()
 if not allowed_origins or allowed_origins == ['']:
     allowed_origins = ["*"]
 
+# Debug: Print CORS configuration
+import sys
+sys.stderr.write(f"[CORS DEBUG] Allowed origins: {allowed_origins}\n")
+sys.stderr.flush()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,

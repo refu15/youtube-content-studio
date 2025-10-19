@@ -28,3 +28,7 @@ services:
     envVars:
       - key: VITE_API_URL
         value: https://youtube-studio-backend.onrender.com
+      - key: VITE_SUPABASE_URL
+        value: https://mdoocfrbqttyjrmeojbf.supabase.co
+      - key: VITE_SUPABASE_ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kb29jZnJicXR0eWpybWVvamJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA3Mjc5OTAsImV4cCI6MjA3NjMwMzk5MH0.0oAGMvKutDpyt7hw0FS7XO4-9g-xmMuZpNL7eCZZ5wY

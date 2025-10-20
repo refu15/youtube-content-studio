@@ -3,7 +3,7 @@ from uuid import UUID
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from supabase_py import Client
+from supabase import Client
 
 from ..models.channel import Channel, ChannelCreate
 from ..models.analysis import AnalysisRunListResponse, AnalysisStatsResponse

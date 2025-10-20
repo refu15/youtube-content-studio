@@ -47,20 +47,19 @@ class YouTubeTrendsAnalyzer:
         try:
             import random
 
-            # ランダムな日数で期間を変える（30-90日前）
-            random_days = random.randint(30, 90)
-            time_ago = datetime.utcnow() - timedelta(days=random_days)
+            # 期間を3ヶ月（90日前）に固定
+            days_ago = 90
+            time_ago = datetime.utcnow() - timedelta(days=days_ago)
             published_after = time_ago.isoformat("T") + "Z"
 
             # キーワードを組み合わせて検索
             search_query = " OR ".join(keywords) + " #shorts"
             print(f"[DEBUG] Search query: {search_query}")
-            print(f"[DEBUG] Published after: {published_after} ({random_days} days ago)")
+            print(f"[DEBUG] Published after: {published_after} ({days_ago} days ago)")
 
-            # ランダムに並び順を変える
-            order_options = ['viewCount', 'relevance', 'date']
-            random_order = random.choice(order_options)
-            print(f"[DEBUG] Order by: {random_order}")
+            # 再生回数順に並べる
+            order = 'viewCount'
+            print(f"[DEBUG] Order by: {order}")
 
             # より多くの結果を取得してランダムサンプリング
             fetch_count = min(max_results * 3, 50)  # 最大50件取得
@@ -187,7 +186,7 @@ class YouTubeTrendsAnalyzer:
         """模擬的なYouTubeトレンドデータを生成（API キーがない場合）"""
 
         prompt = f"""
-以下のキーワードに関連する、YouTubeでトレンドになっているShorts動画を{max_results}個、リアルなデータとして生成してください。
+以下のキーワードに関連する、直近3ヶ月で再生回数が多いYouTube Shorts動画を{max_results}個、リアルなデータとして生成してください。
 
 キーワード: {', '.join(keywords)}
 
@@ -211,7 +210,7 @@ class YouTubeTrendsAnalyzer:
 ※ published_at は過去3ヶ月以内の日付
 ※ すべて日本語で記述
 ※ JSONのみを返してください
-"""
+※ 再生回数が多い順に並べる"""
 
         try:
             response = self.model.generate_content(prompt)

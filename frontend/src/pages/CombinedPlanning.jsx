@@ -13,8 +13,6 @@ export default function CombinedPlanning() {
     trendKeywords: '',
     platforms: {
       YouTube: true,
-      TikTok: true,
-      Instagram: true,
     },
 
     // Viral video params
@@ -134,29 +132,7 @@ export default function CombinedPlanning() {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    プラットフォーム
-                  </label>
-                  <div className="space-y-2">
-                    {Object.keys(formData.platforms).map((platform) => (
-                      <label key={platform} className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={formData.platforms[platform]}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              platforms: { ...formData.platforms, [platform]: e.target.checked },
-                            })
-                          }
-                          className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
-                        />
-                        <span className="ml-2 text-sm text-gray-700">{platform}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
+
               </div>
 
               {/* Viral Video Section */}

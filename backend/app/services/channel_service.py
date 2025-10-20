@@ -2,6 +2,7 @@
 from typing import List, Optional
 from uuid import UUID
 import logging
+import re
 
 from fastapi import HTTPException, status
 from googleapiclient.discovery import build
@@ -80,30 +81,30 @@ class ChannelService:
 
         response = self.supabase.table('channels').insert(new_channel_data).execute()
 
-        if response.get('error'):
+        if response.error:
             logger.exception("Error creating channel")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to create channel: {response['error']['message']}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to create channel: {response.error.message}")
         
-        created_channel = response.get('data', [])[0]
+        created_channel = response.data[0]
         return ChannelInDB(**created_channel)
 
     async def get_channels_by_user(self, user_id: UUID) -> List[Channel]:
         """ユーザーが登録したチャンネル一覧を取得する"""
         response = self.supabase.table('channels').select('*').eq('user_id', str(user_id)).order('created_at', desc=True).execute()
-        if response.get('error'):
+        if response.error:
             logger.exception("Error fetching channels by user")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to fetch channels: {response['error']['message']}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to fetch channels: {response.error.message}")
         
-        channels = response.get('data', [])
+        channels = response.data
         return [Channel(**c) for c in channels]
 
     async def delete_channel(self, user_id: UUID, channel_id: UUID) -> None:
         """チャンネルを削除する"""
         response = self.supabase.table('channels').delete().match({'id': str(channel_id), 'user_id': str(user_id)}).execute()
         
-        if response.get('error'):
+        if response.error:
             logger.exception("Error deleting channel")
-            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to delete channel: {response['error']['message']}")
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to delete channel: {response.error.message}")
         
         # 削除された行がない場合もエラーにはしない（冪等性を保つ）
         return None

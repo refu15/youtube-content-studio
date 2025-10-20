@@ -16,8 +16,6 @@ export default function Trends() {
   const [keywords, setKeywords] = useState('')
   const [platforms, setPlatforms] = useState({
     YouTube: true,
-    TikTok: true,
-    Instagram: true,
   })
   const [downloadingReport, setDownloadingReport] = useState(false)
   const [lastRequest, setLastRequest] = useState(null)
@@ -161,10 +159,6 @@ export default function Trends() {
     switch (platform) {
       case 'YouTube':
         return <Youtube className="h-5 w-5" />
-      case 'TikTok':
-        return <Hash className="h-5 w-5" />
-      case 'Instagram':
-        return <Instagram className="h-5 w-5" />
       default:
         return <TrendingUp className="h-5 w-5" />
     }
@@ -174,10 +168,6 @@ export default function Trends() {
     switch (platform) {
       case 'YouTube':
         return 'bg-red-500'
-      case 'TikTok':
-        return 'bg-black'
-      case 'Instagram':
-        return 'bg-pink-500'
       default:
         return 'bg-gray-500'
     }

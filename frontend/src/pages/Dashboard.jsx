@@ -44,6 +44,7 @@ export default function Dashboard() {
   const [platforms, setPlatforms] = useState(initialPlatforms)
   const [includeViral, setIncludeViral] = useState(true)
   const [minViralRatio, setMinViralRatio] = useState(3)
+  const [maxResultsPerPlatform, setMaxResultsPerPlatform] = useState(5)
   const [showAdvanced, setShowAdvanced] = useState(false)
 
   const [data, setData] = useState(null)
@@ -163,6 +164,7 @@ export default function Dashboard() {
         channel_goal: channelGoal.trim() ? channelGoal.trim() : null,
         platforms: selectedPlatforms,
         include_viral: includeViral,
+        max_results_per_platform: Number(maxResultsPerPlatform),
       }
 
       if (includeViral) {
@@ -293,6 +295,20 @@ export default function Dashboard() {
                     className="w-28 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-200 disabled:bg-gray-100"
                   />
                   <span className="text-xs text-gray-500">再生数 ÷ 登録者数</span>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <label className="text-sm text-gray-600 whitespace-nowrap">トレンド動画数</label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={100}
+                    step={1}
+                    value={maxResultsPerPlatform}
+                    onChange={(event) => setMaxResultsPerPlatform(event.target.value)}
+                    className="w-28 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-200"
+                  />
+                  <span className="text-xs text-gray-500">プラットフォームごとの動画数</span>
                 </div>
               </div>
             )}

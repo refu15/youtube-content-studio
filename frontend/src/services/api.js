@@ -88,8 +88,7 @@ export const channelApi = {
       headers: withUserHeader({}, userId),
     });
     if (!response.ok) {
-      const detail = await parseErrorDetail(response, 'チャンネル一覧の取得に失敗しました');
-      throw new Error(detail);
+      throw new Error(`チャンネル一覧の取得に失敗しました: ${response.status} ${response.statusText}`);
     }
     return response.json();
   },

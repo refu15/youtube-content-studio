@@ -20,7 +20,7 @@ services:
       - key: PYTHON_VERSION
         value: 3.11.0
       - key: ALLOWED_ORIGINS
-        value: "*"
+        value: "https://youtube-studio-frontend.onrender.com,https://youtube-studio-eight.vercel.app"
 
   # Frontend
   - type: web

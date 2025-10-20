@@ -58,3 +58,9 @@ class PlanningResponse(BaseModel):
     """企画案レスポンス"""
     strategy: ChannelStrategy
     calendar: List[ContentCalendar] = Field(..., description="4週間のカレンダー")
+
+
+class ShootingMaterialsRequest(BaseModel):
+    """撮影資料生成リクエスト"""
+    video_concept: VideoConcept
+    format: str = Field("json", description="出力フォーマット (jsonまたはmarkdown)")

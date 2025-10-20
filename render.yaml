@@ -27,7 +27,7 @@ services:
     name: youtube-studio-frontend
     runtime: static
     env: static
-    buildCommand: cd frontend && npm install && npm run build
+    buildCommand: cd frontend && rm -rf node_modules dist && npm install && npm run build
     staticPublishPath: frontend/dist
     envVars:
       - key: VITE_API_URL

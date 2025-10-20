@@ -17,9 +17,13 @@ import sys
 sys.stderr.write(f"[CORS DEBUG] Setting up CORS with wildcard origin\n")
 sys.stderr.flush()
 
+allowed_origins_list = settings.get_allowed_origins()
+sys.stderr.write(f"[CORS DEBUG] Resolved allowed origins: {allowed_origins_list}\n")
+sys.stderr.flush()
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.get_allowed_origins(),
+    allow_origins=allowed_origins_list,
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],

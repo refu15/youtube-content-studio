@@ -2,7 +2,7 @@ from uuid import UUID
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl, ConfigDict
 
 
 class ChannelBase(BaseModel):
@@ -27,8 +27,7 @@ class Channel(ChannelBase):
     created_at: datetime = Field(..., description="登録日時")
     updated_at: datetime = Field(..., description="最終更新日時")
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ChannelInDB(Channel):

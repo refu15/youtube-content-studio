@@ -49,6 +49,7 @@ class ViralFinder:
         max_results: int
     ) -> List[ViralVideo]:
         """YouTube でバイラル動画を検索（模擬データ生成）"""
+        import urllib.parse
 
         prompt = f"""
 以下の条件に合う、日本でバイラルになっているYouTube動画（登録者数が少ないのに再生数が多い）を{max_results}個生成してください。
@@ -100,16 +101,18 @@ class ViralFinder:
                 subscriber_count = item.get('subscriber_count', 10000)
                 view_count = item.get('view_count', 100000)
                 viral_ratio = view_count / subscriber_count if subscriber_count > 0 else 0
+                title = item.get('title', '')
+                search_url = f"https://www.youtube.com/results?search_query={urllib.parse.quote(title)}"
 
                 video_id = f"viral_yt_{idx}_{datetime.now().timestamp()}"
                 viral_videos.append(ViralVideo(
                     platform="YouTube",
-                    title=item.get('title', ''),
+                    title=title,
                     channel_name=item.get('channel_name', ''),
                     subscriber_count=subscriber_count,
                     view_count=view_count,
                     video_id=video_id,
-                    url=f"https://www.youtube.com/watch?v={video_id}",
+                    url=search_url,
                     thumbnail_url="https://via.placeholder.com/640x360",
                     like_count=item.get('like_count'),
                     comment_count=item.get('comment_count'),

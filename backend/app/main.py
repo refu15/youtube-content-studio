@@ -43,7 +43,7 @@ async def health_check():
 
 
 # Import and include routers
-from .api import planning, trends #, viral, analytics, reports, dashboard, analysis, channels, stats
+from .api import planning, trends, viral, analytics, reports, dashboard, analysis, channels, stats
 
 app.include_router(
     planning.router,
@@ -57,44 +57,44 @@ app.include_router(
     tags=["trends"]
 )
 
-# app.include_router(
-#     viral.router,
-#     prefix=f"{settings.API_V1_STR}/viral",
-#     tags=["viral"]
-# )
+app.include_router(
+    viral.router,
+    prefix=f"{settings.API_V1_STR}/viral",
+    tags=["viral"]
+)
 
-# app.include_router(
-#     analytics.router,
-#     prefix=f"{settings.API_V1_STR}/analytics",
-#     tags=["analytics"]
-# )
+app.include_router(
+    analytics.router,
+    prefix=f"{settings.API_V1_STR}/analytics",
+    tags=["analytics"]
+)
 
-# app.include_router(
-#     reports.router,
-#     prefix=f"{settings.API_V1_STR}/reports",
-#     tags=["reports"]
-# )
+app.include_router(
+    reports.router,
+    prefix=f"{settings.API_V1_STR}/reports",
+    tags=["reports"]
+)
 
-# app.include_router(
-#     dashboard.router,
-#     prefix=f"{settings.API_V1_STR}/dashboard",
-#     tags=["dashboard"]
-# )
+app.include_router(
+    dashboard.router,
+    prefix=f"{settings.API_V1_STR}/dashboard",
+    tags=["dashboard"]
+)
 
-# app.include_router(
-#     analysis.router,
-#     prefix=f"{settings.API_V1_STR}/analysis",
-#     tags=["analysis"]
-# )
+app.include_router(
+    analysis.router,
+    prefix=f"{settings.API_V1_STR}/analysis",
+    tags=["analysis"]
+)
 
-# app.include_router(
-#     channels.router,
-#     prefix=f"{settings.API_V1_STR}/channels",
-#     tags=["channels"]
-# )
+app.include_router(
+    channels.router,
+    prefix=f"{settings.API_V1_STR}/channels",
+    tags=["channels"]
+)
 
-# app.include_router(
-#     stats.router,
-#     prefix=f"{settings.API_V1_STR}/stats",
-#     tags=["stats"]
-# )
+app.include_router(
+    stats.router,
+    prefix=f"{settings.API_V1_STR}/stats",
+    tags=["stats"]
+)

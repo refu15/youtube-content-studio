@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Zap, Loader2, ExternalLink, Eye, ThumbsUp, MessageCircle, Users, TrendingUp, Download, Save } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { analysisApi, channelApi } from '../services/api'

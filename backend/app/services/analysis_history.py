@@ -176,7 +176,7 @@ class AnalysisHistoryService:
     def _count_viral_videos(self, user_id: str, channel_id: Optional[UUID] = None) -> int:
         query = (
             self.client.table("analysis_history")
-            .select("result")
+            .select("result_summary")
             .eq("user_id", user_id)
             .eq("analysis_type", "viral")
         )

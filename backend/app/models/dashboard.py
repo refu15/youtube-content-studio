@@ -83,7 +83,7 @@ class DashboardOverviewRequest(BaseModel):
         None, description="チャンネルで達成したい目標（任意）"
     )
     platforms: List[str] = Field(
-        default_factory=lambda: ["YouTube", "TikTok", "Instagram"],
+        default_factory=lambda: ["YouTube"],
         description="分析対象プラットフォーム",
     )
     max_results_per_platform: int = Field(

@@ -19,14 +19,10 @@ import { analysisApi, dashboardApi, statsApi } from '../services/api'
 
 const initialPlatforms = {
   YouTube: true,
-  TikTok: true,
-  Instagram: true,
 }
 
 const platformDescriptions = {
   YouTube: 'ショート動画を含めた最新のトレンドを取得します。',
-  TikTok: 'キーワードからTikTokで伸びている動画テーマを推測します。',
-  Instagram: 'Reels向けの人気フォーマットを抽出します。',
 }
 
 const metricIcons = {

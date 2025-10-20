@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Literal, Optional
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 AnalysisType = Literal["trends", "viral"]
 
@@ -44,6 +44,8 @@ class AnalysisRunResponse(AnalysisRunBase):
     user_id: str
     created_at: datetime
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 class AnalysisRunListResponse(BaseModel):
     """Wrapper for paginated analysis history responses."""
@@ -54,6 +56,8 @@ class AnalysisRunListResponse(BaseModel):
         description="Opaque cursor used to fetch the next page (created_at ISO string)",
     )
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 class AnalysisStatsResponse(BaseModel):
     """Aggregated analysis statistics for the current user."""
@@ -62,3 +66,5 @@ class AnalysisStatsResponse(BaseModel):
     trends_runs: int = Field(..., description="トレンド分析の保存件数")
     viral_runs: int = Field(..., description="バイラル分析の保存件数")
     viral_videos: int = Field(..., description="保存されたバイラル分析に含まれる動画の総数")
+
+    model_config = ConfigDict(from_attributes=True)

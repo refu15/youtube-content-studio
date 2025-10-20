@@ -75,6 +75,7 @@ class YouTubeTrendsAnalyzer:
                 publishedAfter=published_after,
                 type='video',
                 videoDuration='short',  # Shorts (< 60秒)
+                regionCode='JP',
                 relevanceLanguage='ja'
             ).execute()
             print(f"[DEBUG] YouTube API search() completed successfully")

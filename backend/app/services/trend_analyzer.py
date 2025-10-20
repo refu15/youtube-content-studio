@@ -75,7 +75,7 @@ class TrendAnalyzer:
             all_tags.extend(v.tags)
 
         prompt = f"""
-{platform}のトレンド動画を分析して、傾向と特徴を3つのポイントにまとめてください。
+{platform}の日本のトレンド動画を分析して、傾向と特徴を3つのポイントにまとめてください。
 
 トップ動画タイトル:
 {chr(10).join(f"- {t}" for t in titles)}
@@ -124,7 +124,7 @@ class TrendAnalyzer:
             return []
 
         prompt = f"""
-以下のキーワードに関連するトレンド分析結果から、コンテンツ制作のための戦略的な示唆を5つ提案してください。
+以下のキーワードに関連する日本のトレンド分析結果から、コンテンツ制作のための戦略的な示唆を5つ提案してください。
 
 分析キーワード: {', '.join(keywords)}
 

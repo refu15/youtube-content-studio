@@ -5,7 +5,7 @@ from typing import List, Optional
 
 from fastapi import HTTPException, status
 from googleapiclient.discovery import build
-from supabase_py import Client
+from supabase import Client
 
 from ..core.config import settings
 from ..models.channel import Channel, ChannelCreate, ChannelInDB

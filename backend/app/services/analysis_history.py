@@ -1,4 +1,5 @@
 from typing import Optional
+from uuid import UUID
 
 from supabase import Client
 from ..core.database import get_supabase

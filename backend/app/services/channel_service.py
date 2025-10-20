@@ -1,5 +1,6 @@
 
 from typing import List, Optional
+from uuid import UUID
 import logging
 
 from fastapi import HTTPException, status

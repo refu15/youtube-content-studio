@@ -228,6 +228,131 @@ class AIPlanner:
             calendar=calendar
         )
 
+    def generate_shooting_materials(
+        self,
+        video_concept: VideoConcept,
+        format: str = "json"
+    ) -> str:
+        """動画コンセプトから撮影関連資料（構成書）を生成する"""
+
+        if format.lower() not in ["json", "markdown"]:
+            raise ValueError("Unsupported format. Choose 'json' or 'markdown'.")
+
+        json_format_description = """
+以下のJSON形式で出力してください。各フィールドはオプションであり、関連性の高いもののみを埋めてください。:
+
+{
+  "video_title": "動画タイトル",
+  "video_concept": "動画のコンセプト概要",
+  "target_audience": "ターゲット視聴者",
+  "total_estimated_length": "全体の推奨動画尺（例: 5-8分）",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "scene_title": "シーンタイトル",
+      "estimated_length": "シーンの推奨時間（例: 30秒）",
+      "location": "撮影場所（例: 自宅リビング、屋外公園）",
+      "visual_description": "視覚的な描写（カメラアングル、動き、背景、登場人物の表情など）",
+      "dialogue": "セリフ（誰が何を言うか）",
+      "narration": "ナレーション内容",
+      "on_screen_text": "画面表示テキスト（テロップ、字幕など）",
+      "props_and_costumes": "小道具・衣装",
+      "sound_effects": "効果音",
+      "background_music": "BGM",
+      "notes": "その他特記事項"
+    }
+  ],
+  "call_to_action": "動画全体のCall to Action（例: チャンネル登録、コメント、関連動画視聴）",
+  "required_materials": [
+    "必要な素材1（例: カメラ、マイク）",
+    "必要な素材2（例: 企画書、台本）"
+  ],
+  "production_notes": "制作上の注意点やヒント"
+}
+"""
+
+        markdown_format_description = """
+以下のMarkdown形式で出力してください。各セクションはオプションであり、関連性の高いもののみを埋めてください。:
+
+# 動画タイトル
+
+## 動画コンセプト
+動画のコンセプト概要
+
+## ターゲット視聴者
+ターゲット視聴者
+
+## 全体の推奨動画尺
+全体の推奨動画尺（例: 5-8分）
+
+## シーン構成
+
+### シーン1: シーンタイトル
+- **推奨時間:** シーンの推奨時間（例: 30秒）
+- **撮影場所:** 撮影場所（例: 自宅リビング、屋外公園）
+- **視覚的描写:** 視覚的な描写（カメラアングル、動き、背景、登場人物の表情など）
+- **セリフ:** セリフ（誰が何を言うか）
+- **ナレーション:** ナレーション内容
+- **画面表示テキスト:** 画面表示テキスト（テロップ、字幕など）
+- **小道具・衣装:** 小道具・衣装
+- **効果音:** 効果音
+- **BGM:** BGM
+- **特記事項:** その他特記事項
+
+### シーン2: シーンタイトル
+...
+
+## Call to Action
+動画全体のCall to Action（例: チャンネル登録、コメント、関連動画視聴）
+
+## 必要な素材
+- 必要な素材1（例: カメラ、マイク）
+- 必要な素材2（例: 企画書、台本）
+
+## 制作上の注意点
+制作上の注意点やヒント
+"""
+
+        format_description = json_format_description if format.lower() == "json" else markdown_format_description
+
+        prompt = f"""
+あなたはYouTube動画制作の専門家です。以下の動画コンセプトに基づいて、日本市場向けの具体的な撮影関連資料（構成書）を作成してください。
+
+## 動画コンセプト
+- タイトル: {video_concept.title}
+- 説明: {video_concept.description}
+- フック: {video_concept.hook}
+- 主要ポイント: {', '.join(video_concept.key_points)}
+- CTA: {video_concept.cta}
+- 推奨尺: {video_concept.estimated_length}
+
+## 指示
+上記の動画コンセプトを基に、日本市場の視聴者に響くような構成書を作成してください。
+
+{format_description}
+
+※ すべて日本語で記述してください。
+※ JSONまたはMarkdownのみを返してください。説明文は不要です。
+"""
+
+        try:
+            response = self.model.generate_content(prompt)
+            response_text = response.text.strip()
+
+            # Extract content from markdown code blocks if present
+            if "```json" in response_text:
+                response_text = response_text.split("```json")[1].split("```")[0].strip()
+            elif "```markdown" in response_text:
+                response_text = response_text.split("```markdown")[1].split("```")[0].strip()
+            elif "```" in response_text:
+                response_text = response_text.split("```")[1].split("```")[0].strip()
+
+            return response_text
+
+        except Exception as e:
+            print(f"Error generating shooting materials: {e}")
+            raise
+
 
 # Singleton instance
 ai_planner = AIPlanner()

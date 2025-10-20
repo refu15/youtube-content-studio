@@ -5,7 +5,8 @@ from ..models.schemas import (
     ChannelStrategy,
     VideoConcept,
     PlanningResponse,
-    PersonaInput
+    PersonaInput,
+    ShootingMaterialsRequest
 )
 from ..services.ai_planner import ai_planner
 from typing import List
@@ -65,6 +66,21 @@ async def generate_full_plan(request: ChannelStrategyRequest):
         return plan
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"企画案生成に失敗しました: {str(e)}")
+
+
+@router.post("/generate-shooting-materials", response_model=str)
+async def generate_shooting_materials(request: ShootingMaterialsRequest):
+    """動画コンセプトから撮影関連資料（構成書）を生成"""
+    try:
+        materials = ai_planner.generate_shooting_materials(
+            video_concept=request.video_concept,
+            format=request.format
+        )
+        return materials
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"撮影資料生成に失敗しました: {str(e)}")
 
 
 @router.get("/health")

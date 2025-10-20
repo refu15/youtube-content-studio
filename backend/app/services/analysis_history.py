@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Dict, List, Optional
 from uuid import UUID
 
 from supabase import Client

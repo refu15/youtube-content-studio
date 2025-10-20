@@ -76,7 +76,7 @@ export default function ViralFinder() {
         max_subscribers: parseInt(maxSubscribers),
         platforms: ['YouTube'],
         max_results: 20,
-        channel_id: selectedChannel || null,
+        channel_id: selectedChannel ? selectedChannel : null,
       })
     } catch (err) {
       setError(err.message || 'バイラル動画検索に失敗しました')
@@ -406,8 +406,7 @@ export default function ViralFinder() {
                             rel="noopener noreferrer"
                             className="ml-2 text-xs text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded hover:bg-blue-100 transition-colors"
                           >
-                            YouTube で見る
-                          </a>
+                                                          YouTube で類似動画を検索                          </a>
                         )}
                       </div>
 

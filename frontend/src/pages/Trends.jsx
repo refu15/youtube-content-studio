@@ -76,7 +76,7 @@ export default function Trends() {
         persona_keywords: keywordList,
         platforms: selectedPlatforms,
         max_results_per_platform: 10,
-        channel_id: selectedChannel || null,
+        channel_id: selectedChannel ? selectedChannel : null,
       })
     } catch (err) {
       setError(err.message || 'トレンド分析に失敗しました')
@@ -409,7 +409,7 @@ export default function Trends() {
                               rel="noopener noreferrer"
                               className="ml-2 text-xs text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded hover:bg-blue-100 transition-colors"
                             >
-                              YouTube で見る
+                              YouTube で類似動画を検索
                             </a>
                           )}
                         </div>

@@ -1,6 +1,6 @@
 
-from uuid import UUID
 from typing import List, Dict, Any
+import logging
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from supabase import Client
@@ -11,6 +11,8 @@ from ..services.channel_service import ChannelService
 from ..services.analysis_history import analysis_history_service
 from ..core.database import get_supabase
 from .deps import get_current_user_id
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -47,6 +49,7 @@ async def get_channels(
         user_uuid = UUID(user_id)
         return await service.get_channels_by_user(user_id=user_uuid)
     except Exception as e:
+        logger.exception("Error in get_channels")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 

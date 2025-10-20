@@ -1,7 +1,6 @@
 
-import re
-from uuid import UUID
 from typing import List, Optional
+import logging
 
 from fastapi import HTTPException, status
 from googleapiclient.discovery import build
@@ -10,6 +9,7 @@ from supabase import Client
 from ..core.config import settings
 from ..models.channel import Channel, ChannelCreate, ChannelInDB
 
+logger = logging.getLogger(__name__)
 
 class ChannelService:
     """チャンネル管理サービス"""
@@ -80,6 +80,7 @@ class ChannelService:
         response = self.supabase.table('channels').insert(new_channel_data).execute()
 
         if response.get('error'):
+            logger.exception("Error creating channel")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to create channel: {response['error']['message']}")
         
         created_channel = response.get('data', [])[0]
@@ -89,6 +90,7 @@ class ChannelService:
         """ユーザーが登録したチャンネル一覧を取得する"""
         response = self.supabase.table('channels').select('*').eq('user_id', str(user_id)).order('created_at', desc=True).execute()
         if response.get('error'):
+            logger.exception("Error fetching channels by user")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to fetch channels: {response['error']['message']}")
         
         channels = response.get('data', [])
@@ -99,6 +101,7 @@ class ChannelService:
         response = self.supabase.table('channels').delete().match({'id': str(channel_id), 'user_id': str(user_id)}).execute()
         
         if response.get('error'):
+            logger.exception("Error deleting channel")
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to delete channel: {response['error']['message']}")
         
         # 削除された行がない場合もエラーにはしない（冪等性を保つ）

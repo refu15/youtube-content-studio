@@ -70,7 +70,7 @@ class YouTubeTrendsAnalyzer:
                 q=search_query,
                 part='id,snippet',
                 maxResults=fetch_count,
-                order=random_order,
+                order=order,
                 publishedAfter=published_after,
                 type='video',
                 videoDuration='short',  # Shorts (< 60秒)

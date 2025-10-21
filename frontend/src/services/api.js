@@ -218,7 +218,7 @@ export const analysisApi = {
 
     const queryString = searchParams.toString()
     const response = await fetch(
-      `${API_URL}/api/v1/analysis${queryString ? `?${queryString}` : ''}`,
+      `${API_URL}/api/v1/analysis/${queryString ? `?${queryString}` : ''}`,
       {
         method: 'GET',
         headers: withUserHeader({}, userId),

@@ -84,7 +84,7 @@ export default function ViralFinder() {
         return
       }
 
-      const response = await fetch(`${API_URL}/api/v1/viral/find`, {
+      const response = await fetch(`${API_URL}/api/v1/viral/find/`, { // Added trailing slash here
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

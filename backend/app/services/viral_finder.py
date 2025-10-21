@@ -112,7 +112,7 @@ class ViralFinder:
                     subscriber_count=subscriber_count,
                     view_count=view_count,
                     video_id=video_id,
-                    url=search_url,
+                    url=f"https://www.youtube.com/watch?v={video_id}",
                     thumbnail_url="https://via.placeholder.com/640x360",
                     like_count=item.get('like_count'),
                     comment_count=item.get('comment_count'),

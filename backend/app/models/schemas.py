@@ -64,3 +64,13 @@ class ShootingMaterialsRequest(BaseModel):
     """撮影資料生成リクエスト"""
     video_concept: VideoConcept
     format: str = Field("json", description="出力フォーマット (jsonまたはmarkdown)")
+
+
+from .trends import TrendingAnalysisRequest
+from .viral_finder import ViralFinderRequest
+
+class CombinedPlanRequest(BaseModel):
+    trends_request: TrendingAnalysisRequest
+    viral_request: ViralFinderRequest
+    channel_genre: str
+    channel_name: Optional[str] = None

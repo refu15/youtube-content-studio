@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom' // Added this line
 import { TrendingUp, Loader2, Youtube, ExternalLink, Eye, ThumbsUp, MessageCircle, Download, Save } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { analysisApi, channelApi } from '../services/api'

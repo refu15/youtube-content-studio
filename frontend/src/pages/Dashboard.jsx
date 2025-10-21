@@ -705,7 +705,7 @@ export default function Dashboard() {
             <div className="mb-2 flex items-center justify-between">
               <p className="text-sm font-semibold text-gray-900">トレンド分析</p>
               <Link to="/trends" className="text-xs text-red-500 hover:text-red-600">
-                詳細を見る
+                全体を見る
               </Link>
             </div>
             {trendHistory.length === 0 ? (
@@ -713,17 +713,20 @@ export default function Dashboard() {
             ) : (
               <ul className="space-y-3">
                 {trendHistory.map((item) => (
-                  <li key={item.id} className="rounded-md border border-gray-200 p-3">
-                    <p className="text-xs text-gray-400">{formatHistoryDate(item.created_at)}</p>
-                    <p className="mt-1 text-sm font-medium text-gray-900">
-                      {item.summary || '保存したトレンド分析'}
-                    </p>
-                    {item.keywords?.length > 0 && (
-                      <p className="mt-1 text-xs text-gray-500">
-                        {item.keywords.slice(0, 3).join(' / ')}
+                  <Link to={`/analysis/${item.id}`} key={item.id} className="block">
+                    <li className="rounded-md border border-gray-200 p-3 hover:bg-gray-50 transition-colors">
+                      <p className="text-xs text-gray-400">{formatHistoryDate(item.created_at)}</p>
+                      <p className="mt-1 text-sm font-medium text-gray-900">
+                        {item.summary || '保存したトレンド分析'}
                       </p>
-                    )}
-                  </li>
+                      {item.keywords?.length > 0 && (
+                        <p className="mt-1 text-xs text-gray-500">
+                          {item.keywords.slice(0, 3).join(' / ')}
+                        </p>
+                      )}
+                      <span className="mt-2 inline-block text-xs text-red-500 hover:underline">詳細を見る</span>
+                    </li>
+                  </Link>
                 ))}
               </ul>
             )}
@@ -733,7 +736,7 @@ export default function Dashboard() {
             <div className="mb-2 flex items-center justify-between">
               <p className="text-sm font-semibold text-gray-900">バイラル分析</p>
               <Link to="/viral" className="text-xs text-red-500 hover:text-red-600">
-                詳細を見る
+                全体を見る
               </Link>
             </div>
             {viralHistory.length === 0 ? (
@@ -741,17 +744,20 @@ export default function Dashboard() {
             ) : (
               <ul className="space-y-3">
                 {viralHistory.map((item) => (
-                  <li key={item.id} className="rounded-md border border-gray-200 p-3">
-                    <p className="text-xs text-gray-400">{formatHistoryDate(item.created_at)}</p>
-                    <p className="mt-1 text-sm font-medium text-gray-900">
-                      {item.summary || '保存したバイラル分析'}
-                    </p>
-                    {item.keywords?.length > 0 && (
-                      <p className="mt-1 text-xs text-gray-500">
-                        {item.keywords.slice(0, 3).join(' / ')}
+                  <Link to={`/analysis/${item.id}`} key={item.id} className="block">
+                    <li className="rounded-md border border-gray-200 p-3 hover:bg-gray-50 transition-colors">
+                      <p className="text-xs text-gray-400">{formatHistoryDate(item.created_at)}</p>
+                      <p className="mt-1 text-sm font-medium text-gray-900">
+                        {item.summary || '保存したバイラル分析'}
                       </p>
-                    )}
-                  </li>
+                      {item.keywords?.length > 0 && (
+                        <p className="mt-1 text-xs text-gray-500">
+                          {item.keywords.slice(0, 3).join(' / ')}
+                        </p>
+                      )}
+                      <span className="mt-2 inline-block text-xs text-red-500 hover:underline">詳細を見る</span>
+                    </li>
+                  </Link>
                 ))}
               </ul>
             )}

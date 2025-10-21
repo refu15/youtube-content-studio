@@ -17,7 +17,7 @@ class AnalysisRunBase(BaseModel):
         None,
         description="Short text used to display the run in lists",
     )
-    channel_id: Optional[UUID] = Field(
+    channel_id: Optional[str] = Field(
         None,
         description="Optional reference to a registered channel",
     )

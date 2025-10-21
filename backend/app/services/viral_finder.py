@@ -1,5 +1,6 @@
 from typing import List
 from datetime import datetime
+import google.generativeai as genai
 import logging
 import urllib.parse
 from googleapiclient.discovery import build
@@ -19,6 +20,13 @@ class ViralFinder:
         else:
             self.youtube = None
             logger.warning("YOUTUBE_API_KEY is not set. Viral video search will not function.")
+        
+        if settings.GEMINI_API_KEY:
+            genai.configure(api_key=settings.GEMINI_API_KEY)
+            self.model = genai.GenerativeModel('gemini-2.0-flash')
+        else:
+            self.model = None
+            logger.warning("GEMINI_API_KEY is not set. AI analysis for viral videos will not function.")
 
     def find_viral_videos(
         self,

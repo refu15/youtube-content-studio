@@ -12,6 +12,7 @@ import Analytics from './pages/Analytics'
 import CombinedPlanning from './pages/CombinedPlanning'
 import ChannelManagement from './pages/ChannelManagement'
 import AnalysisDetail from './pages/AnalysisDetail' // Import the new component
+import AnalysisHistory from './pages/AnalysisHistory' // Import the new component
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="combined" element={<CombinedPlanning />} />
           <Route path="channels" element={<ChannelManagement />} />
           <Route path="analysis/:analysisId" element={<AnalysisDetail />} /> {/* New route */}
+          <Route path="analysis-history" element={<AnalysisHistory />} /> {/* New route */}
         </Route>
       </Routes>
     </AuthProvider>

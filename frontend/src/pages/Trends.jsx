@@ -24,6 +24,43 @@ export default function Trends() {
   const [saveError, setSaveError] = useState('')
   const [channels, setChannels] = useState([]);
   const [selectedChannel, setSelectedChannel] = useState('');
+  const [trendHistory, setTrendHistory] = useState([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyError, setHistoryError] = useState('');
+
+  useEffect(() => {
+    if (!user?.id) {
+      setTrendHistory([]);
+      return;
+    }
+
+    let cancelled = false;
+
+    const fetchHistory = async () => {
+      setHistoryLoading(true);
+      setHistoryError('');
+      try {
+        const response = await analysisApi.listRuns(user.id, { analysis_type: 'trends', limit: 5 });
+        if (!cancelled) {
+          setTrendHistory(response.items || []);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setHistoryError(err.message || 'トレンド分析履歴の取得に失敗しました');
+        }
+      } finally {
+        if (!cancelled) {
+          setHistoryLoading(false);
+        }
+      }
+    };
+
+    fetchHistory();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
 
   useEffect(() => {
     if (user?.id) {
@@ -193,6 +230,45 @@ export default function Trends() {
         <p className="mt-2 text-gray-600">
           キーワードを入力して、各プラットフォームのトレンドショート動画を分析します
         </p>
+      </div>
+
+      {/* Past Trend Analyses */}
+      <div className="mb-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">過去のトレンド分析</h2>
+          {historyLoading ? (
+              <div className="flex justify-center items-center h-24">
+                  <Loader2 className="h-6 w-6 animate-spin text-green-500" />
+                  <p className="ml-3 text-gray-600">履歴を読み込み中...</p>
+              </div>
+          ) : historyError ? (
+              <div className="flex items-center justify-center h-24 text-red-600">
+                  <AlertCircle className="h-5 w-5 mr-2" />
+                  <p>{historyError}</p>
+              </div>
+          ) : trendHistory.length === 0 ? (
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 text-center">
+                  <p className="text-gray-500">まだ保存されたトレンド分析はありません。</p>
+              </div>
+          ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {trendHistory.map((item) => (
+                      <Link to={`/analysis/${item.id}`} key={item.id} className="block">
+                          <div className="rounded-lg border border-gray-200 p-3 hover:bg-gray-50 transition-colors h-full flex flex-col">
+                              <p className="text-xs text-gray-400">{new Date(item.created_at).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo', hour12: false })}</p>
+                              <p className="mt-2 text-sm font-medium text-gray-900 flex-grow">
+                                  {item.summary || '保存したトレンド分析'}
+                              </p>
+                              {item.keywords?.length > 0 && (
+                                  <p className="mt-1 text-xs text-gray-500">
+                                      キーワード: {item.keywords.slice(0, 3).join(', ')}
+                                  </p>
+                              )}
+                              <span className="mt-3 inline-block text-xs text-green-500 hover:underline">詳細を見る</span>
+                          </div>
+                      </Link>
+                  ))}
+              </div>
+          )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

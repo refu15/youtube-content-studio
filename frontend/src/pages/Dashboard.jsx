@@ -704,7 +704,7 @@ export default function Dashboard() {
           <div className="rounded-lg border border-gray-200 p-4">
             <div className="mb-2 flex items-center justify-between">
               <p className="text-sm font-semibold text-gray-900">トレンド分析</p>
-              <Link to="/trends" className="text-xs text-red-500 hover:text-red-600">
+              <Link to="/analysis-history" className="text-xs text-red-500 hover:text-red-600">
                 全体を見る
               </Link>
             </div>
@@ -735,7 +735,7 @@ export default function Dashboard() {
           <div className="rounded-lg border border-gray-200 p-4">
             <div className="mb-2 flex items-center justify-between">
               <p className="text-sm font-semibold text-gray-900">バイラル分析</p>
-              <Link to="/viral" className="text-xs text-red-500 hover:text-red-600">
+              <Link to="/analysis-history" className="text-xs text-red-500 hover:text-red-600">
                 全体を見る
               </Link>
             </div>
